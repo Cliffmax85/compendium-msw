@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { getCharacter } from "../../services/api-call";
 import Card from '../../components/Character/Card';
+import styles from '../../App.css';
 
 export default function CharactersList() {
     const [characters, setCharacters] = useState([]);
@@ -14,7 +15,7 @@ export default function CharactersList() {
     const handleSearch = (e) => {
         setSearch(e.target.value);
         const searchedCharacters = characters.filter((char) => 
-        char.name.toLowercase().includes(e.target.value.toLowercase().trim()));
+        char.name.toLowerCase().includes(e.target.value.toLowerCase().trim()));
 
         setResults(searchedCharacters);
     } 
@@ -31,8 +32,21 @@ export default function CharactersList() {
     return (
       <>
         <h2>Star Wars Characters</h2>
-        <div className="chars">
-            {characters.map((char) => {
+        <div>
+            <input 
+              placeholder="Search Star Wars Characters"
+              value={search}
+              onChange={handleSearch}
+            />
+        </div>
+        <div>
+            {loading ? (
+                <p>...Loading</p>
+            ) : (
+                
+
+        <div className={styles.chars}>
+            {characterList.map((char) => {
                 return (
                     <Card
                       name={char.name}
@@ -43,6 +57,9 @@ export default function CharactersList() {
                 )
             })}
         </div>
+        )}
+        </div>
+        {noResults && <h1>NO CHARACTERS FOUND?!!!!!!!????</h1>}
       </>
   );
 }
