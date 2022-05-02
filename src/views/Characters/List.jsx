@@ -51,7 +51,7 @@ export default function CharactersList() {
                     <Card
                       name={char.name}
                       image={char.image}
-                      world={char.world}
+                      world={char.homeworld}
                       species={char.species}
                     />
                 )
