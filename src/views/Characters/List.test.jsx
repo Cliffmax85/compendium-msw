@@ -1,8 +1,8 @@
-import { screen, render } from "@testing-library/react";
+import { screen, render, waitForElementToBeRemoved, waitFor } from "@testing-library/react";
 import { rest } from "msw";
 import { setupServer } from 'msw/node';
-import { MemoryRouter } from "react-router-dom";
 import List from './List';
+import userEvent from '@testing-library/user-event';
 
 const char = {
     "id": 1,
@@ -53,18 +53,40 @@ const char = {
 
 const server = setupServer(
     rest.get('https://rawcdn.githack.com/akabab/starwars-api/0.2.1/api/all.json', (req, res, ctx) =>
-    res(ctx.json(char)))
+    res(ctx.json([char])))
 );
 
 beforeAll(() => server.listen());
+afterEach
 afterEach(() => server.close());
 
 it('should grab some data from the list page', async () => {
     render(<List />)
-    // await screen.findAllByText(/loading/i)
+    screen.getByText(/loading/i)
 
-    // const h2 = await screen.findAllByRole('heading')
+    const h2 = screen.getByRole('heading')
+    // Star Wars Characters resposne to below log. 
+    // console.log('HEEECH TWO||||', h2.textContent);
+    expect(h2.textContent).toEqual('Star Wars Characters');
 
-    // console.log(h2.textContent);
-    // screen.debug();
+    const name = await screen.findByText(char.name);
+    // console.log(name);
+    // Returning Cliffy Skywalker
+    expect(name).toBeInTheDocument;
+
+    // console.log('||||MASTERS||||', char.masters[2]);
+    // const thirdMaster = await screen.findByText(char.masters[2]);
+    // How can I get the above to work?
+    // console.log('||THIRDMAST||', thirdMaster);
+    // expect(thirdMaster).toBeInTheDocument();
 })
+
+it('should render cliff skywalker', async () => {
+  render(<List />)
+    await waitForElementToBeRemoved(screen.getByText(/...loading/i));
+    const searchBox = await screen.findByPlaceholderText('Search Star Wars Characters');
+    userEvent.type(searchBox, 'cliff');
+
+    const searchChars = await screen.findByText('Cliffy Skywalker')
+    console.log('||SEARCHCHAR||', searchChars.textContent);
+    })
