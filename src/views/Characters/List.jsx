@@ -23,7 +23,7 @@ export default function CharactersList() {
   useEffect(() => {
         async function fetchCharacters() {
         const data = await getCharacter();
-        console.log(data);
+        // console.log(data);
         setCharacters(data);
         setLoading(false);
     }
@@ -48,7 +48,7 @@ export default function CharactersList() {
         <div className={styles.chars}>
             {characterList.map((char) => {
                 return (
-                    <Card
+                    <Card key={char.id}
                       name={char.name}
                       image={char.image}
                       world={char.homeworld}
