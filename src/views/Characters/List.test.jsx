@@ -66,27 +66,20 @@ it('should grab some data from the list page', async () => {
 
     const h2 = screen.getByRole('heading')
     // Star Wars Characters resposne to below log. 
-    // console.log('HEEECH TWO||||', h2.textContent);
     expect(h2.textContent).toEqual('Star Wars Characters');
 
     const name = await screen.findByText(char.name);
-    // console.log(name);
     // Returning Cliffy Skywalker
-    expect(name).toBeInTheDocument;
+    expect(name).toBeInTheDocument();
 
-    // console.log('||||MASTERS||||', char.masters[2]);
-    // const thirdMaster = await screen.findByText(char.masters[2]);
-    // How can I get the above to work?
-    // console.log('||THIRDMAST||', thirdMaster);
-    // expect(thirdMaster).toBeInTheDocument();
-})
-
-it('should render cliff skywalker', async () => {
-  render(<List />)
-    await waitForElementToBeRemoved(screen.getByText(/...loading/i));
+    // Find seach bar and type in luke
     const searchBox = await screen.findByPlaceholderText('Search Star Wars Characters');
-    userEvent.type(searchBox, 'cliff');
+    userEvent.type(searchBox, 'clifford');
 
-    const searchChars = await screen.findByText('Cliffy Skywalker')
-    console.log('||SEARCHCHAR||', searchChars.textContent);
-    })
+    // Search for clifford and expect to find 'no chars' placeholder
+    // Because clifford isnt on the page 
+    const searchChars = await screen.findByText('NO CHARACTERS FOUND?!!!!!!!????')
+    expect(searchChars).toBeInTheDocument();
+
+
+})
